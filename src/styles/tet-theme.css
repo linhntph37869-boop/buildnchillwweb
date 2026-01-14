@@ -1,0 +1,842 @@
+/* ============================================
+   LUNAR NEW YEAR 2026 - YEAR OF THE HORSE
+   BÍNH NGỌ TẾT THEME - GLOBAL OVERRIDES
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Crimson+Text:wght@700&display=swap');
+
+:root {
+  /* Tet Colors - Lucky Red & Luxury Gold */
+  --tet-lucky-red: #D70018 !important;
+  --tet-lucky-red-dark: #A00010 !important;
+  --tet-lucky-red-light: #E63946 !important;
+  --tet-gold: #FFD700 !important;
+  --tet-gold-dark: #DAA500 !important;
+  --tet-gold-light: #FFE135 !important;
+  --tet-apricot: #FFA500 !important;
+  --tet-peach: #FDBCB4 !important;
+  --tet-cream: #FFFDF0 !important;
+  --tet-white: #FFFFFF !important;
+  --tet-text-dark: #4a0404 !important;
+  --tet-text-charcoal: #333333 !important;
+  
+  /* Tet Gradients */
+  --tet-gradient-1: linear-gradient(135deg, #D70018 0%, #FFD700 50%, #FFA500 100%) !important;
+  --tet-gradient-2: linear-gradient(135deg, #FFFDF0 0%, #FFF8DC 100%) !important;
+  --tet-gradient-3: linear-gradient(180deg, rgba(215, 0, 24, 0.1) 0%, rgba(255, 215, 0, 0.05) 100%) !important;
+  
+  /* Tet Shadows */
+  --tet-shadow-soft: 0 4px 20px rgba(215, 0, 24, 0.15) !important;
+  --tet-shadow-medium: 0 8px 30px rgba(215, 0, 24, 0.25) !important;
+  --tet-shadow-strong: 0 12px 40px rgba(215, 0, 24, 0.35) !important;
+  --tet-glow: 0 0 20px rgba(255, 215, 0, 0.5) !important;
+  --tet-gold-glow: 0 0 30px rgba(255, 215, 0, 0.4) !important;
+  
+  /* Custom CSS Variables for other overrides */
+  --bg-primary: #FFFDF0 !important;
+  --bg-secondary: #FFF8DC !important;
+  --bg-tertiary: #FFFFFF !important;
+  --tet-red: #D70018 !important;
+  --tet-red-dark: #A00010 !important;
+  --text-primary: #4a0404 !important;
+  --text-secondary: #333333 !important;
+  --text-muted: #4a0404 !important;
+  --glass-border: rgba(215, 0, 24, 0.3) !important;
+  --glass-shadow: rgba(215, 0, 24, 0.15) !important;
+}
+
+/* ============================================
+   GLOBAL BODY & BACKGROUNDS
+   ============================================ */
+
+html, body {
+  background: var(--tet-gradient-2) !important;
+  background-image: 
+    radial-gradient(circle at 20% 30%, rgba(215, 0, 24, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(255, 215, 0, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(255, 165, 0, 0.05) 0%, transparent 50%) !important;
+  color: var(--tet-text-charcoal) !important;
+  overflow-x: hidden !important;
+}
+
+body {
+  background: var(--tet-gradient-2) !important;
+  background-image: 
+    radial-gradient(circle at 20% 30%, rgba(215, 0, 24, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(255, 215, 0, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(255, 165, 0, 0.05) 0%, transparent 50%) !important;
+  color: var(--tet-text-charcoal) !important;
+}
+
+.App {
+  background: var(--tet-gradient-2) !important;
+  color: var(--tet-text-charcoal) !important;
+}
+
+/* ============================================
+   REMOVE WINTER ICE/GLASS EFFECTS
+   ============================================ */
+
+.tet-container,
+.shop-tet-container {
+  background: var(--tet-gradient-2) !important;
+  padding: 2rem 0 !important;
+}
+
+/* ============================================
+   NAVBAR & TOP BAR
+   ============================================ */
+
+.navbar {
+  background: linear-gradient(135deg, #D70018 0%, #A00010 100%) !important;
+  border-bottom: 3px solid #FFD700 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: 0 4px 20px rgba(215, 0, 24, 0.3) !important;
+}
+
+.navbar-brand {
+  color: #FFD700 !important;
+  font-weight: 900 !important;
+  font-size: 1.75rem !important;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  -webkit-text-fill-color: unset !important;
+  background-clip: unset !important;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5) !important;
+  letter-spacing: 2px !important;
+}
+
+.navbar-brand:hover {
+  color: #FFE135 !important;
+  text-shadow: 0 0 15px rgba(255, 215, 0, 0.8) !important;
+}
+
+.navbar-nav .nav-link {
+  color: #FFD700 !important;
+  font-weight: 600 !important;
+  transition: all 0.3s ease !important;
+}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+  color: #FFE135 !important;
+  background: rgba(255, 215, 0, 0.15) !important;
+  border-radius: 8px !important;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.5) !important;
+}
+
+.navbar-nav .nav-link::after {
+  background: linear-gradient(90deg, #FFD700, #FFE135) !important;
+}
+
+.navbar-toggler {
+  border-color: #FFD700 !important;
+}
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23FFD700' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+}
+
+.top-bar {
+  background: linear-gradient(135deg, #FFF8DC 0%, rgba(215, 0, 24, 0.1) 100%) !important;
+  border-bottom: 2px solid #D70018 !important;
+}
+
+.top-bar a {
+  color: #4a0404 !important;
+  transition: all 0.3s ease !important;
+}
+
+.top-bar a:hover,
+.top-bar .copy-btn:hover {
+  color: #D70018 !important;
+  text-shadow: 0 0 8px rgba(215, 0, 24, 0.5) !important;
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+
+.footer {
+  background: linear-gradient(135deg, #D70018 0%, #A00010 100%) !important;
+  border-top: 4px solid #FFD700 !important;
+  color: #FFD700 !important;
+  box-shadow: 0 -4px 20px rgba(215, 0, 24, 0.3) !important;
+}
+
+.footer h5 {
+  color: #FFD700 !important;
+  font-weight: 900 !important;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5) !important;
+}
+
+.footer p,
+.footer a {
+  color: #FFFDF0 !important;
+}
+
+.footer a:hover {
+  color: #FFE135 !important;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.6) !important;
+}
+
+.footer .social-icons a {
+  background: #FFD700 !important;
+  color: #D70018 !important;
+  transition: all 0.3s ease !important;
+}
+
+.footer .social-icons a:hover {
+  background: #FFE135 !important;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.8) !important;
+  transform: translateY(-3px) !important;
+}
+
+/* ============================================
+   BUTTONS - RED ENVELOPE STYLE
+   ============================================ */
+
+.btn, button, .tet-button, .tet-button {
+  background: linear-gradient(135deg, #D70018 0%, #A00010 100%) !important;
+  border: 3px solid #FFD700 !important;
+  color: #FFD700 !important;
+  border-radius: 12px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1.5px !important;
+  padding: 12px 28px !important;
+  transition: all 0.3s ease !important;
+  position: relative !important;
+  overflow: hidden !important;
+  box-shadow: 0 4px 15px rgba(215, 0, 24, 0.3), 0 0 10px rgba(215, 0, 24, 0.2) !important;
+  text-decoration: none !important;
+  display: inline-block !important;
+}
+
+.btn:hover, button:hover, .tet-button:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 8px 25px rgba(215, 0, 24, 0.5), 0 0 30px rgba(255, 215, 0, 0.6) !important;
+  border-color: #FFE135 !important;
+  background: linear-gradient(135deg, #A00010 0%, #D70018 100%) !important;
+}
+
+.btn::before, button::before, .tet-button::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: -100% !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.4), transparent) !important;
+  transition: left 0.5s ease !important;
+}
+
+.btn:hover::before, button:hover::before, .tet-button:hover::before {
+  left: 100% !important;
+}
+
+.btn-primary, .btn-success, .btn-danger, .btn-warning, .btn-info {
+  background: linear-gradient(135deg, #D70018 0%, #A00010 100%) !important;
+  border: 3px solid #FFD700 !important;
+  color: #FFD700 !important;
+}
+
+.btn-primary:hover, .btn-success:hover, .btn-danger:hover, .btn-warning:hover, .btn-info:hover {
+  background: linear-gradient(135deg, #A00010 0%, #D70018 100%) !important;
+  border-color: #FFE135 !important;
+  color: #FFE135 !important;
+}
+
+.btn-outline-primary, .tet-button-outline, .tet-button {
+  background: transparent !important;
+  border: 3px solid #FFD700 !important;
+  color: #FFD700 !important;
+}
+
+.btn-outline-primary:hover, .tet-button-outline:hover {
+  background: #FFD700 !important;
+  color: #D70018 !important;
+  border-color: #FFD700 !important;
+}
+
+.btn-secondary {
+  background: #FFD700 !important;
+  border: 3px solid #D70018 !important;
+  color: #D70018 !important;
+  font-weight: 700 !important;
+}
+
+.btn-secondary:hover {
+  background: #FFE135 !important;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.6) !important;
+}
+
+.btn:disabled {
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+}
+
+/* ============================================
+   GLASS EFFECT - CONVERT TO TET CARDS
+   ============================================ */
+
+.glass, .tet-glass, .glass-strong {
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 3px solid #FFD700 !important;
+  border-radius: 16px !important;
+  box-shadow: 0 8px 30px rgba(215, 0, 24, 0.25) !important;
+  transition: all 0.3s ease !important;
+}
+
+.glass:hover, .tet-glass:hover, .glass-strong:hover {
+  border-color: #FFE135 !important;
+  box-shadow: 0 12px 40px rgba(215, 0, 24, 0.35), 0 0 20px rgba(255, 215, 0, 0.5) !important;
+  transform: translateY(-5px) !important;
+}
+
+/* ============================================
+   CARDS
+   ============================================ */
+
+.card, .tet-card {
+  background: #FFFFFF !important;
+  border: 3px solid #FFD700 !important;
+  box-shadow: 0 8px 30px rgba(215, 0, 24, 0.25) !important;
+  border-radius: 16px !important;
+  transition: all 0.3s ease !important;
+  overflow: hidden !important;
+}
+
+.card:hover, .tet-card:hover {
+  transform: translateY(-10px) !important;
+  box-shadow: 0 12px 40px rgba(215, 0, 24, 0.35), 0 0 30px rgba(255, 215, 0, 0.5) !important;
+  border-color: #FFE135 !important;
+}
+
+.card-title {
+  color: #4a0404 !important;
+  font-weight: 700 !important;
+}
+
+.card-text {
+  color: #333333 !important;
+}
+
+.card-img-top {
+  height: 200px !important;
+  object-fit: cover !important;
+  transition: transform 0.3s !important;
+}
+
+.card:hover .card-img-top {
+  transform: scale(1.1) !important;
+}
+
+.tet-card::before,
+.tet-card.selected {
+  background: rgba(215, 0, 24, 0.05) !important;
+}
+
+.tet-card.selected {
+  border-color: #FFD700 !important;
+  box-shadow: var(--tet-shadow-strong) !important;
+}
+
+/* ============================================
+   FORM CONTROLS & INPUTS
+   ============================================ */
+
+.form-control, .tet-input {
+  background: #FFFFFF !important;
+  border: 2px solid rgba(215, 0, 24, 0.3) !important;
+  color: #4a0404 !important;
+  border-radius: 8px !important;
+  padding: 12px 16px !important;
+  transition: all 0.3s ease !important;
+}
+
+.form-control:focus, .tet-input:focus {
+  background: #FFFDF0 !important;
+  border-color: #D70018 !important;
+  box-shadow: 0 0 20px rgba(215, 0, 24, 0.4), inset 0 0 10px rgba(255, 215, 0, 0.1) !important;
+  color: #4a0404 !important;
+  outline: none !important;
+}
+
+.form-control::placeholder, .tet-input::placeholder {
+  color: #999999 !important;
+}
+
+.form-label, .tet-label {
+  color: #D70018 !important;
+  font-weight: 600 !important;
+  margin-bottom: 0.5rem !important;
+}
+
+select.form-control, select.tet-select {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23D70018' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 0.75rem center !important;
+  background-size: 16px 12px !important;
+  padding-right: 2.5rem !important;
+}
+
+/* ============================================
+   TITLES & HEADINGS
+   ============================================ */
+
+h1, h2, h3, h4, h5, h6 {
+  color: #4a0404 !important;
+  font-weight: 900 !important;
+  letter-spacing: 1px !important;
+}
+
+h1, .hero-title, .tet-title {
+  background: linear-gradient(135deg, #D70018 0%, #FFD700 50%, #FFA500 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  font-size: 3rem !important;
+  text-shadow: 0 0 30px rgba(215, 0, 24, 0.3) !important;
+}
+
+h2, .tet-section-title {
+  color: #D70018 !important;
+  font-size: 2rem !important;
+}
+
+h3 {
+  color: #A00010 !important;
+}
+
+.tet-title::before,
+.tet-title::after {
+  content: '🐴' !important;
+  font-size: 1.5rem !important;
+}
+
+.tet-section-title::before {
+  content: '🎊' !important;
+  font-size: 1.2rem !important;
+}
+
+/* ============================================
+   HERO SECTION
+   ============================================ */
+
+.hero-section {
+  background: linear-gradient(135deg, #FFFDF0 0%, #FFF8DC 100%) !important;
+  min-height: 100vh !important;
+}
+
+.hero-section::before {
+  content: '🎊' !important;
+}
+
+.hero-section::after {
+  content: '🧧' !important;
+}
+
+.hero-title {
+  color: transparent !important;
+}
+
+.hero-subtitle {
+  color: #333333 !important;
+}
+
+/* ============================================
+   BADGES & LABELS
+   ============================================ */
+
+.badge, .tet-badge {
+  background: linear-gradient(135deg, #D70018 0%, #FFD700 50%, #FFA500 100%) !important;
+  color: #FFFFFF !important;
+  padding: 0.5rem 1rem !important;
+  border-radius: 20px !important;
+  font-weight: 600 !important;
+  border: 2px solid #FFE135 !important;
+  box-shadow: 0 4px 15px rgba(215, 0, 24, 0.3) !important;
+}
+
+.bg-success {
+  background: #28a745 !important;
+  color: #FFFFFF !important;
+}
+
+.bg-danger {
+  background: #D70018 !important;
+  color: #FFFFFF !important;
+}
+
+.bg-warning {
+  background: #ffc107 !important;
+  color: #212529 !important;
+}
+
+.bg-info {
+  background: #FFD700 !important;
+  color: #D70018 !important;
+}
+
+/* ============================================
+   MESSAGES & ALERTS
+   ============================================ */
+
+.alert, .tet-message {
+  border-radius: 12px !important;
+  border: 2px solid !important;
+  padding: 1rem !important;
+}
+
+.alert-success, .tet-message.success {
+  background: rgba(215, 0, 24, 0.1) !important;
+  border-color: #D70018 !important;
+  color: #4a0404 !important;
+}
+
+.alert-danger, .tet-message.error {
+  background: rgba(215, 0, 24, 0.15) !important;
+  border-color: #A00010 !important;
+  color: #4a0404 !important;
+}
+
+.alert-warning {
+  background: rgba(255, 165, 0, 0.1) !important;
+  border-color: #FFA500 !important;
+  color: #333333 !important;
+}
+
+.alert-info {
+  background: rgba(255, 215, 0, 0.1) !important;
+  border-color: #FFD700 !important;
+  color: #4a0404 !important;
+}
+
+/* ============================================
+   SERVER STATUS CARD
+   ============================================ */
+
+.server-status-card {
+  background: linear-gradient(135deg, rgba(215, 0, 24, 0.1) 0%, rgba(255, 215, 0, 0.1) 100%) !important;
+  border: 3px solid #FFD700 !important;
+  border-radius: 16px !important;
+  padding: 2rem !important;
+  box-shadow: 0 8px 30px rgba(215, 0, 24, 0.25) !important;
+}
+
+.server-status-item strong {
+  color: #D70018 !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+}
+
+/* ============================================
+   NEWS & CONTENT
+   ============================================ */
+
+.news-content {
+  color: #333333 !important;
+}
+
+.news-content h1,
+.news-content h2,
+.news-content h3 {
+  color: #4a0404 !important;
+}
+
+.news-content a {
+  color: #D70018 !important;
+  text-decoration: none !important;
+}
+
+.news-content a:hover {
+  color: #A00010 !important;
+  text-decoration: underline !important;
+}
+
+/* ============================================
+   ADMIN PANEL - SIDEBAR
+   ============================================ */
+
+.admin-sidebar {
+  background: linear-gradient(180deg, #D70018 0%, #A00010 100%) !important;
+  border-right: 3px solid #FFD700 !important;
+  box-shadow: 4px 0 20px rgba(215, 0, 24, 0.3) !important;
+}
+
+.admin-sidebar .nav-link {
+  color: #FFD700 !important;
+  font-weight: 600 !important;
+  transition: all 0.3s ease !important;
+  border-left: 4px solid transparent !important;
+  padding-left: 1rem !important;
+}
+
+.admin-sidebar .nav-link:hover {
+  background: rgba(255, 215, 0, 0.15) !important;
+  border-left-color: #FFE135 !important;
+  color: #FFE135 !important;
+}
+
+.admin-sidebar .nav-link.active {
+  background: #FFD700 !important;
+  color: #D70018 !important;
+  border-left-color: #FFE135 !important;
+  font-weight: 700 !important;
+}
+
+.admin-card {
+  background: #FFFFFF !important;
+  border: 3px solid #FFD700 !important;
+  box-shadow: 0 8px 30px rgba(215, 0, 24, 0.25) !important;
+  border-radius: 16px !important;
+}
+
+.admin-table {
+  color: #333333 !important;
+}
+
+.admin-table thead {
+  background: linear-gradient(135deg, rgba(215, 0, 24, 0.15) 0%, rgba(255, 215, 0, 0.1) 100%) !important;
+  border-bottom: 3px solid #FFD700 !important;
+}
+
+.admin-table th {
+  color: #4a0404 !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+}
+
+.admin-table td {
+  color: #333333 !important;
+  border-bottom: 1px solid rgba(215, 0, 24, 0.1) !important;
+}
+
+/* ============================================
+   SHOP PAGE - PRICE TAGS
+   ============================================ */
+
+.shop-tet-container {
+  background: var(--tet-gradient-2) !important;
+}
+
+.price, .product-price {
+  background: #FFD700 !important;
+  color: #D70018 !important;
+  padding: 8px 16px !important;
+  border-radius: 8px !important;
+  font-weight: 700 !important;
+  font-size: 1.2rem !important;
+  display: inline-block !important;
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4) !important;
+}
+
+.tet-preview {
+  background: rgba(215, 0, 24, 0.1) !important;
+  border: 2px solid #D70018 !important;
+  border-radius: 12px !important;
+  padding: 1rem !important;
+}
+
+.tet-info {
+  background: rgba(255, 215, 0, 0.1) !important;
+  border: 2px solid #FFD700 !important;
+  border-radius: 12px !important;
+  padding: 1.5rem !important;
+}
+
+.tet-info h5 {
+  color: #D70018 !important;
+}
+
+.tet-info ul {
+  color: #333333 !important;
+}
+
+/* ============================================
+   HORSE DECORATIONS
+   ============================================ */
+
+.horse-decor {
+  position: relative;
+  display: inline-block;
+}
+
+.horse-decor::before {
+  content: '🐴';
+  position: absolute;
+  font-size: 3rem;
+  opacity: 0.1;
+  z-index: -1;
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(5deg);
+  }
+}
+
+/* ============================================
+   VIETNAMESE CALLIGRAPHY FONTS
+   ============================================ */
+
+h1, h2, h3, .tet-title, .hero-title {
+  font-family: 'Playfair Display', 'Crimson Text', serif !important;
+  letter-spacing: 2px !important;
+  font-style: italic !important;
+}
+
+/* ============================================
+   SEARCH BAR
+   ============================================ */
+
+.search-bar {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border: 2px solid #FFD700 !important;
+  border-radius: 12px !important;
+  padding: 1rem !important;
+  box-shadow: 0 4px 15px rgba(215, 0, 24, 0.2) !important;
+}
+
+.search-bar input {
+  background: transparent !important;
+  border: none !important;
+  color: #4a0404 !important;
+  width: 100% !important;
+}
+
+.search-bar input:focus {
+  outline: none !important;
+}
+
+.search-bar input::placeholder {
+  color: #999999 !important;
+}
+
+/* ============================================
+   CAROUSEL & SLIDERS
+   ============================================ */
+
+.carousel-btn {
+  background: #FFFFFF !important;
+  border: 3px solid #FFD700 !important;
+  color: #D70018 !important;
+  font-weight: 700 !important;
+  transition: all 0.3s ease !important;
+}
+
+.carousel-btn:hover {
+  background: #FFD700 !important;
+  color: #D70018 !important;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.6) !important;
+}
+
+/* ============================================
+   TEXT COLORS
+   ============================================ */
+
+.text-muted {
+  color: #4a0404 !important;
+}
+
+.text-secondary {
+  color: #333333 !important;
+}
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================ */
+
+@media (max-width: 768px) {
+  h1, .tet-title, .hero-title {
+    font-size: 2rem !important;
+  }
+  
+  h2, .tet-section-title {
+    font-size: 1.5rem !important;
+  }
+  
+  .navbar {
+    padding: 0.75rem 0 !important;
+  }
+  
+  .navbar-brand {
+    font-size: 1.35rem !important;
+  }
+  
+  .btn {
+    padding: 10px 20px !important;
+    font-size: 0.9rem !important;
+  }
+}
+
+/* ============================================
+   REMOVE LEGACY EFFECTS
+   ============================================ */
+
+.tet-title::after,
+.tet-title::before {
+  content: '🐴' !important;
+  right: auto !important;
+  left: auto !important;
+}
+
+@keyframes sparkle {
+  0%, 100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+.tet-text-red {
+  color: #D70018 !important;
+}
+
+.tet-text-gold {
+  color: #FFD700 !important;
+}
+
+.tet-bg-red {
+  background: #D70018 !important;
+  color: #FFFFFF !important;
+}
+
+.tet-bg-gold {
+  background: #FFD700 !important;
+  color: #D70018 !important;
+}
+
+.tet-border-gold {
+  border: 3px solid #FFD700 !important;
+}
+
+.tet-border-red {
+  border: 3px solid #D70018 !important;
+}
+
+.tet-shadow {
+  box-shadow: 0 8px 30px rgba(215, 0, 24, 0.25) !important;
+}
+
+.tet-glow-gold {
+  box-shadow: 0 0 30px rgba(255, 215, 0, 0.5) !important;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5) !important;
+}
