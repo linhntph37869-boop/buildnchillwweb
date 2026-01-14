@@ -2,8 +2,10 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { BiPlus, BiEdit, BiTrash, BiCheck, BiX } from 'react-icons/bi';
 import { supabase } from '../supabaseClient';
+import { useData } from '../context/DataContext';
 
 const ShopProductsManagement = () => {
+  const { uploadImage } = useData();
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -119,32 +121,15 @@ const ShopProductsManagement = () => {
     }
   };
 
-  const uploadImage = async () => {
+  const handleUploadImage = async () => {
     if (!imageFile) return formData.image_url;
 
     try {
       setUploading(true);
-      const fileExt = imageFile.name.split('.').pop();
-      const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${fileExt}`;
-      const filePath = fileName;
-
-      const { error: uploadError } = await supabase.storage
-        .from('products')
-        .upload(filePath, imageFile, {
-          cacheControl: '3600',
-          upsert: true
-        });
-
-      if (uploadError) throw uploadError;
-
-      const { data: { publicUrl } } = supabase.storage
-        .from('products')
-        .getPublicUrl(filePath);
-
-      return publicUrl;
+      const publicUrl = await uploadImage(imageFile, 'products');
+      return publicUrl || formData.image_url;
     } catch (error) {
       console.error('Error uploading image:', error);
-      alert('Lỗi khi tải ảnh lên: ' + error.message);
       return formData.image_url;
     } finally {
       setUploading(false);
@@ -154,7 +139,7 @@ const ShopProductsManagement = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const finalImageUrl = await uploadImage();
+      const finalImageUrl = await handleUploadImage();
       const finalFormData = { ...formData, image_url: finalImageUrl };
 
       if (editingProduct) {

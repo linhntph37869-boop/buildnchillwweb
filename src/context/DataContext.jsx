@@ -568,32 +568,39 @@ export const DataProvider = ({ children }) => {
     }
   };
 
-  const uploadImage = async (file) => {
+  const uploadImage = async (file, bucket = 'images') => {
     try {
       if (!file) return null;
+      
+      // Kiểm tra dung lượng file (10MB = 10 * 1024 * 1024 bytes)
+      if (file.size > 10 * 1024 * 1024) {
+        throw new Error('Dung lượng file không được vượt quá 10MB!');
+      }
 
       const fileExt = file.name.split('.').pop();
-      const fileName = `${Math.random()}.${fileExt}`;
-      const filePath = `contact-images/${fileName}`;
+      const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
+      
+      // Nếu là bucket contact-images thì lưu vào thư mục contact-images/ bên trong bucket đó (giữ logic cũ)
+      const filePath = bucket === 'contact-images' ? `contact-images/${fileName}` : fileName;
 
-      const { data, error: uploadError } = await supabase.storage
-        .from('contact-images')
+      const { error: uploadError } = await supabase.storage
+        .from(bucket)
         .upload(filePath, file);
 
       if (uploadError) {
         console.error('Error uploading image:', uploadError);
-        // If storage bucket doesn't exist, return null and continue without image
         return null;
       }
 
       // Get public URL
       const { data: { publicUrl } } = supabase.storage
-        .from('contact-images')
+        .from(bucket)
         .getPublicUrl(filePath);
 
       return publicUrl;
     } catch (error) {
       console.error('Error in uploadImage:', error);
+      alert(`Lỗi upload: ${error.message}`);
       return null;
     }
   };
@@ -655,44 +662,13 @@ export const DataProvider = ({ children }) => {
     }
   };
 
-  const uploadImage = async (file, bucket = 'images') => {
-    try {
-      if (!file) return null;
-      
-      // Kiểm tra dung lượng file (10MB = 10 * 1024 * 1024 bytes)
-      if (file.size > 10 * 1024 * 1024) {
-        throw new Error('Dung lượng file không được vượt quá 10MB!');
-      }
-
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
-      const filePath = `${fileName}`;
-
-      const { error: uploadError } = await supabase.storage
-        .from(bucket)
-        .upload(filePath, file);
-
-      if (uploadError) throw uploadError;
-
-      const { data: { publicUrl } } = supabase.storage
-        .from(bucket)
-        .getPublicUrl(filePath);
-
-      return publicUrl;
-    } catch (error) {
-      console.error('Error uploading image:', error);
-      alert(`Lỗi upload: ${error.message}`);
-      return null;
-    }
-  };
-
   const submitContact = async (contactData) => {
     try {
       let imageUrl = null;
 
       // Upload image if provided
       if (contactData.image) {
-        imageUrl = await uploadImage(contactData.image);
+        imageUrl = await uploadImage(contactData.image, 'contact-images');
       }
 
       const { data, error } = await supabase
