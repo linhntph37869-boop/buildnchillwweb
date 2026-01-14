@@ -42,7 +42,8 @@ const Admin = () => {
     updateSiteSettings,
     markContactAsRead,
     updateContactStatus,
-    deleteContact
+    deleteContact,
+    uploadImage
   } = useData();
   
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -279,15 +280,28 @@ const Admin = () => {
 
   const handleSave = async () => {
     try {
+      let imageUrl = formData.image;
+      
+      // Nếu image là một File object (người dùng vừa chọn file)
+      if (formData.image instanceof File) {
+        const uploadedUrl = await uploadImage(formData.image, 'news');
+        if (uploadedUrl) {
+          imageUrl = uploadedUrl;
+        } else {
+          return; // Lỗi đã được alert trong uploadImage
+        }
+      }
+
+      const finalData = { ...formData, image: imageUrl };
+
       if (editingPost) {
-        const updatedPost = { ...editingPost, ...formData };
-        const success = await updateNews(editingPost.id, updatedPost);
+        const success = await updateNews(editingPost.id, finalData);
         if (success) {
           setShowModal(false);
           setEditingPost(null);
         }
       } else {
-        const success = await addNews(formData);
+        const success = await addNews(finalData);
         if (success) {
           setShowModal(false);
           setEditingPost(null);
@@ -1137,16 +1151,25 @@ const Admin = () => {
                   />
                 </div>
                 <div className="mb-3">
-                  <label className="form-label">URL Hình Ảnh</label>
+                  <label className="form-label">Hình Ảnh Bài Viết</label>
                   <input
-                    type="url"
+                    type="file"
                     className="form-control"
-                    name="image"
-                    value={formData.image}
-                    onChange={handleInputChange}
-                    required
-                    placeholder="https://example.com/image.jpg"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      if (file) {
+                        setFormData({ ...formData, image: file });
+                      }
+                    }}
                   />
+                  <small className="text-muted">Tối đa 10MB. Để trống nếu không muốn thay đổi ảnh cũ.</small>
+                  {formData.image && typeof formData.image === 'string' && (
+                    <div className="mt-2">
+                      <img src={formData.image} alt="Preview" style={{ height: '50px', borderRadius: '4px' }} />
+                      <p className="small text-muted mb-0">Ảnh hiện tại</p>
+                    </div>
+                  )}
                 </div>
                 <div className="mb-3">
                   <label className="form-label">Ngày Đăng</label>

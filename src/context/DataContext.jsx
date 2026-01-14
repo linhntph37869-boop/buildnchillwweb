@@ -655,6 +655,37 @@ export const DataProvider = ({ children }) => {
     }
   };
 
+  const uploadImage = async (file, bucket = 'images') => {
+    try {
+      if (!file) return null;
+      
+      // Kiểm tra dung lượng file (10MB = 10 * 1024 * 1024 bytes)
+      if (file.size > 10 * 1024 * 1024) {
+        throw new Error('Dung lượng file không được vượt quá 10MB!');
+      }
+
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from(bucket)
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from(bucket)
+        .getPublicUrl(filePath);
+
+      return publicUrl;
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      alert(`Lỗi upload: ${error.message}`);
+      return null;
+    }
+  };
+
   const submitContact = async (contactData) => {
     try {
       let imageUrl = null;
@@ -824,6 +855,7 @@ export const DataProvider = ({ children }) => {
     markContactAsRead,
     updateContactStatus,
     deleteContact,
+    uploadImage,
 
     isAuthenticated,
     login,

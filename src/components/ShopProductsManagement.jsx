@@ -111,8 +111,8 @@ const ShopProductsManagement = () => {
         alert('Vui lòng chọn file ảnh!');
         return;
       }
-      if (file.size > 2 * 1024 * 1024) {
-        alert('Kích thước ảnh tối đa 2MB!');
+      if (file.size > 10 * 1024 * 1024) {
+        alert('Kích thước ảnh tối đa 10MB!');
         return;
       }
       setImageFile(file);
@@ -287,13 +287,9 @@ const ShopProductsManagement = () => {
                   )}
                   <div className="flex-grow-1">
                     <input type="file" className="winter-input" accept="image/*" onChange={handleImageChange} />
-                    <small className="text-muted">Tải ảnh lên từ thiết bị (Max 2MB). Hoặc để trống nếu dùng ảnh cũ.</small>
+                    <small className="text-muted">Tải ảnh lên từ thiết bị (Max 10MB). Để trống nếu dùng ảnh cũ.</small>
                   </div>
                 </div>
-              </div>
-              <div className="mb-3">
-                <label className="winter-label">URL Hình Ảnh</label>
-                <input type="url" className="winter-input" value={formData.image_url} onChange={(e) => setFormData({...formData, image_url: e.target.value})} placeholder="https://..." />
               </div>
               <div className="row">
                 <div className="col-md-6 mb-3">
