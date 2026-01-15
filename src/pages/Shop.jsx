@@ -495,10 +495,10 @@ const Shop = () => {
                           alt={product.name}
                           style={{ 
                             width: '100%', 
-                            height: '200px', 
-                            objectFit: 'cover',
-                            borderRadius: '12px 12px 0 0',
-                            marginBottom: '1rem'
+                            height: 'auto', 
+                            borderRadius: '12px',
+                            marginBottom: '1rem',
+                            display: 'block'
                           }}
                         />
                       )}
