@@ -11,6 +11,14 @@ const Navbar = () => {
     return location.pathname === path;
   };
 
+  const closeMenu = () => {
+    const navbarCollapse = document.getElementById('navbarNav');
+    if (navbarCollapse && navbarCollapse.classList.contains('show')) {
+      const toggler = document.querySelector('.navbar-toggler');
+      if (toggler) toggler.click();
+    }
+  };
+
   const navItems = [
     { path: '/', label: 'Trang Chủ', icon: BiHomeAlt },
     { path: '/about', label: 'Giới Thiệu', icon: BiInfoCircle },
@@ -28,7 +36,7 @@ const Navbar = () => {
       transition={{ duration: 0.5, delay: 0.2 }}
     >
       <div className="container">
-        <Link className="navbar-brand" to="/">
+        <Link className="navbar-brand" to="/" onClick={closeMenu}>
           {siteSettings?.site_title || 'BuildnChill'}
         </Link>
         <button
@@ -58,6 +66,7 @@ const Navbar = () => {
                   <Link 
                     className={`nav-link ${isActive(item.path) ? 'active' : ''}`}
                     to={item.path}
+                    onClick={closeMenu}
                   >
                     <Icon className="me-1" />
                     {item.label}

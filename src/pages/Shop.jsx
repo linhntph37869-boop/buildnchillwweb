@@ -90,8 +90,11 @@ const Shop = () => {
         .eq('active', true)
         .order('display_order', { ascending: true });
       
-      if (error) throw error;
-      setCategories(data || []);
+      const cats = data || [];
+      setCategories(cats);
+      if (cats.length > 0 && !selectedCategory) {
+        setSelectedCategory(cats[0].id);
+      }
     } catch (error) {
       console.error('Error loading categories:', error);
     }
@@ -446,20 +449,6 @@ const Shop = () => {
                   Danh Mục
                 </h4>
                 <div className="d-flex flex-column gap-2">
-                  <motion.button
-                    className={`winter-button ${!selectedCategory ? 'selected' : ''}`}
-                    style={{ 
-                      background: !selectedCategory ? 'var(--winter-blue)' : 'transparent',
-                      border: '2px solid var(--winter-blue)',
-                      color: !selectedCategory ? 'white' : 'var(--winter-blue)',
-                      textAlign: 'left',
-                      justifyContent: 'flex-start'
-                    }}
-                    onClick={() => handleCategoryChange(null)}
-                    whileHover={{ scale: 1.02 }}
-                  >
-                    Tất Cả
-                  </motion.button>
                   {categories.map(category => (
                     <motion.button
                       key={category.id}

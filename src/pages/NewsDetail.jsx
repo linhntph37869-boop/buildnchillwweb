@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useData } from '../context/DataContext';
 import { BiArrowBack, BiCalendar } from 'react-icons/bi';
 import SnowEffect from '../components/SnowEffect';
+import 'react-quill/dist/quill.snow.css';
 import '../styles/winter-theme.css';
 
 const NewsDetail = () => {
@@ -61,10 +62,10 @@ const NewsDetail = () => {
             className="img-fluid rounded mb-4" 
             alt={post.title}
             style={{ 
-              maxHeight: '500px', 
               width: '100%', 
-              objectFit: 'cover',
-              border: '2px solid rgba(14, 165, 233, 0.3)'
+              height: 'auto',
+              border: '2px solid rgba(14, 165, 233, 0.3)',
+              borderRadius: '12px'
             }}
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -100,8 +101,9 @@ const NewsDetail = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
-            dangerouslySetInnerHTML={{ __html: post.content }}
-          />
+          >
+            <div className="ql-editor" dangerouslySetInnerHTML={{ __html: post.content }} style={{ padding: 0 }} />
+          </motion.div>
         </article>
       </motion.div>
       </div>

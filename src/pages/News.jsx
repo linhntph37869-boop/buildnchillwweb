@@ -109,17 +109,17 @@ const News = () => {
         >
           <div className="card glass">
             <div className="row g-0">
-              <div className="col-md-4">
+              <div className="col-md-5">
                 <motion.img 
                   src={featuredPost.image} 
-                  className="img-fluid rounded-start" 
+                  className="img-fluid rounded-start w-100" 
                   alt={featuredPost.title}
-                  style={{ height: '100%', objectFit: 'cover', minHeight: '300px' }}
+                  style={{ height: 'auto', display: 'block' }}
                   whileHover={{ scale: 1.05 }}
                   transition={{ duration: 0.3 }}
                 />
               </div>
-              <div className="col-md-8">
+              <div className="col-md-7">
                 <div className="card-body p-4">
                   <h2 className="card-title news-title-truncate" style={{ color: 'var(--winter-blue-dark)', marginBottom: '1rem', fontWeight: 700 }}>
                     {featuredPost.title}
@@ -160,9 +160,9 @@ const News = () => {
               <div className="card glass h-100">
                 <motion.img 
                   src={post.image} 
-                  className="card-img-top" 
+                  className="card-img-top w-100" 
                   alt={post.title}
-                  style={{ height: '200px', objectFit: 'cover' }}
+                  style={{ height: 'auto', display: 'block' }}
                   whileHover={{ scale: 1.1 }}
                   transition={{ duration: 0.3 }}
                 />
