@@ -485,7 +485,7 @@ const Shop = () => {
           </AnimatePresence>
           <div className="row">
             <motion.div 
-              className="col-lg-3 mb-4"
+              className="col-lg-2 mb-4 order-1"
               variants={itemVariants}
               initial="hidden"
               animate="visible"
@@ -514,69 +514,10 @@ const Shop = () => {
                   ))}
                 </div>
               </div>
-
-              <div className="top-nạp-card">
-                <div className="mb-4">
-                  <h5 className="fw-bold mb-3 d-flex align-items-center gap-2" style={{ color: 'var(--winter-blue-dark)' }}>
-                    <BiTrophy className="text-warning" /> Bảng Xếp Hạng
-                  </h5>
-                  
-                  <div className="filter-group">
-                    <div className="date-field">
-                      <label>Từ ngày</label>
-                      <input 
-                        type="date" 
-                        className="date-input-clean"
-                        value={dateRange.start}
-                        onChange={(e) => setDateRange({ ...dateRange, start: e.target.value })}
-                      />
-                    </div>
-                    <div className="date-field">
-                      <label>Đến ngày</label>
-                      <input 
-                        type="date" 
-                        className="date-input-clean"
-                        value={dateRange.end}
-                        onChange={(e) => setDateRange({ ...dateRange, end: e.target.value })}
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="leaderboard-list">
-                  {topUsers.length === 0 ? (
-                    <div className="text-center py-4">
-                      <p className="text-muted small m-0">Chưa có dữ liệu nạp</p>
-                    </div>
-                  ) : (
-                    topUsers.map((user, index) => (
-                      <div 
-                        key={index} 
-                        className={`leaderboard-item rank-${index + 1}`}
-                      >
-                        <div className="rank-number">
-                          {index === 0 ? <BiTrophy className="rank-icon gold" /> : 
-                           index === 1 ? <BiTrophy className="rank-icon silver" /> :
-                           index === 2 ? <BiTrophy className="rank-icon bronze" /> : 
-                           index + 1}
-                        </div>
-                        <div className="user-info">
-                          <div className="user-name">{user.username}</div>
-                          <div className="small text-muted" style={{ fontSize: '0.7rem' }}>Nạp tích lũy</div>
-                        </div>
-                        <div className="user-amount">
-                          {user.total.toLocaleString('vi-VN')}
-                          <span style={{ fontSize: '0.65rem', marginLeft: '2px', color: '#64748b' }}>đ</span>
-                        </div>
-                      </div>
-                    ))
-                  )}
-                </div>
-              </div>
             </motion.div>
 
             <motion.div 
-              className="col-lg-9"
+              className="col-lg-7 order-3 order-lg-2"
               variants={containerVariants}
               initial="hidden"
               animate="visible"
@@ -585,7 +526,7 @@ const Shop = () => {
                 {filteredProducts.map((product) => (
                   <motion.div 
                     key={product.id}
-                    className="col-md-6 col-lg-4"
+                    className="col-md-6 col-lg-6"
                     variants={itemVariants}
                   >
                     <motion.div 
@@ -636,6 +577,83 @@ const Shop = () => {
                 </div>
               )}
             </motion.div>
+
+            <motion.div 
+              className="col-lg-3 mb-4 order-2 order-lg-3"
+              variants={itemVariants}
+              initial="hidden"
+              animate="visible"
+            >
+              <div className="top-nạp-card prominent">
+                <div className="mb-4">
+                  <h5 className="fw-bold mb-3 d-flex align-items-center gap-2" style={{ color: 'var(--winter-blue-dark)' }}>
+                    <BiTrophy className="text-warning" /> Bảng Xếp Hạng
+                  </h5>
+                  
+                  <div className="filter-group">
+                    <div className="date-field">
+                      <label>Từ ngày</label>
+                      <input 
+                        type="date" 
+                        className="date-input-clean"
+                        value={dateRange.start}
+                        onChange={(e) => setDateRange({ ...dateRange, start: e.target.value })}
+                      />
+                    </div>
+                    <div className="date-field">
+                      <label>Đến ngày</label>
+                      <input 
+                        type="date" 
+                        className="date-input-clean"
+                        value={dateRange.end}
+                        onChange={(e) => setDateRange({ ...dateRange, end: e.target.value })}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="leaderboard-list">
+                  {topUsers.length === 0 ? (
+                    <div className="text-center py-4">
+                      <p className="text-muted small m-0">Chưa có dữ liệu nạp</p>
+                    </div>
+                  ) : (
+                    topUsers.map((user, index) => (
+                      <div 
+                        key={index} 
+                        className={`leaderboard-item rank-${index + 1}`}
+                      >
+                        <div className="rank-number">
+                          {index === 0 ? <BiTrophy className="rank-icon gold glow-icon" /> : 
+                           index === 1 ? <BiTrophy className="rank-icon silver" /> :
+                           index === 2 ? <BiTrophy className="rank-icon bronze" /> : 
+                           index + 1}
+                        </div>
+                        <div className="user-avatar-wrapper">
+                          <img 
+                            src={`https://minotar.net/helm/${user.username}/32.png`} 
+                            alt={user.username}
+                            className="user-avatar"
+                            onError={(e) => e.target.src = `https://minotar.net/helm/Steve/32.png`}
+                          />
+                        </div>
+                        <div className="user-info">
+                          <div className="user-name-container">
+                            <span className="user-name">{user.username}</span>
+                          </div>
+                          <div className="small text-muted" style={{ fontSize: '0.7rem' }}>Nạp tích lũy</div>
+                        </div>
+                        <div className="user-amount">
+                          {user.total.toLocaleString('vi-VN')}
+                          <span style={{ fontSize: '0.65rem', marginLeft: '2px', color: '#64748b' }}>đ</span>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+            </motion.div>
+
           </div>
 
           {selectedProduct && (

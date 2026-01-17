@@ -373,3 +373,27 @@ body {
 .rank-icon.silver { color: #94a3b8; filter: drop-shadow(0 0 5px rgba(148, 163, 184, 0.5)); }
 .rank-icon.bronze { color: #d97706; filter: drop-shadow(0 0 5px rgba(217, 119, 6, 0.5)); }
 
+/* Avatar Styling */
+.user-avatar-wrapper {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 2px solid rgba(14, 165, 233, 0.2);
+  background: #f1f5f9;
+  flex-shrink: 0;
+}
+
+.user-avatar-wrapper.admin-avatar {
+  width: 28px;
+  height: 28px;
+  border-width: 1.5px;
+}
+
+.user-avatar {
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  display: block;
+}
+

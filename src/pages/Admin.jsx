@@ -689,6 +689,14 @@ const Admin = () => {
                                    i === 2 ? <BiTrophy className="rank-icon bronze" /> : 
                                    i + 1}
                                 </span>
+                                <div className="user-avatar-wrapper admin-avatar">
+                                  <img 
+                                    src={`https://minotar.net/helm/${u.username}/24.png`} 
+                                    alt={u.username}
+                                    className="user-avatar"
+                                    onError={(e) => e.target.src = `https://minotar.net/helm/Steve/24.png`}
+                                  />
+                                </div>
                                 <div>
                                   <span className="fw-bold d-block">{u.username}</span>
                                 </div>
