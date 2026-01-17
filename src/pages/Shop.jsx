@@ -585,30 +585,29 @@ const Shop = () => {
               animate="visible"
             >
               <div className="top-nạp-card prominent">
-                <div className="mb-4">
-                  <h5 className="fw-bold mb-3 d-flex align-items-center gap-2" style={{ color: 'var(--winter-blue-dark)' }}>
-                    <BiTrophy className="text-warning" /> Bảng Xếp Hạng
-                  </h5>
-                  
-                  <div className="filter-group">
-                    <div className="date-field">
-                      <label>Từ ngày</label>
-                      <input 
-                        type="date" 
-                        className="date-input-clean"
-                        value={dateRange.start}
-                        onChange={(e) => setDateRange({ ...dateRange, start: e.target.value })}
-                      />
-                    </div>
-                    <div className="date-field">
-                      <label>Đến ngày</label>
-                      <input 
-                        type="date" 
-                        className="date-input-clean"
-                        value={dateRange.end}
-                        onChange={(e) => setDateRange({ ...dateRange, end: e.target.value })}
-                      />
-                    </div>
+                <div className="top-nap-header">
+                  <span className="top-nap-star"><BiStar /></span>
+                  <h2 className="top-nap-title">Top Nạp</h2>
+                </div>
+                
+                <div className="filter-group">
+                  <div className="date-field">
+                    <label>Từ ngày</label>
+                    <input 
+                      type="date" 
+                      className="date-input-clean"
+                      value={dateRange.start}
+                      onChange={(e) => setDateRange({ ...dateRange, start: e.target.value })}
+                    />
+                  </div>
+                  <div className="date-field">
+                    <label>Đến ngày</label>
+                    <input 
+                      type="date" 
+                      className="date-input-clean"
+                      value={dateRange.end}
+                      onChange={(e) => setDateRange({ ...dateRange, end: e.target.value })}
+                    />
                   </div>
                 </div>
 
@@ -624,28 +623,26 @@ const Shop = () => {
                         className={`leaderboard-item rank-${index + 1}`}
                       >
                         <div className="rank-number">
-                          {index === 0 ? <BiTrophy className="rank-icon gold glow-icon" /> : 
-                           index === 1 ? <BiTrophy className="rank-icon silver" /> :
-                           index === 2 ? <BiTrophy className="rank-icon bronze" /> : 
-                           index + 1}
+                          {index + 1}
                         </div>
                         <div className="user-avatar-wrapper">
                           <img 
-                            src={`https://minotar.net/helm/${user.username}/32.png`} 
+                            src={`https://minotar.net/helm/${user.username}/48.png`} 
                             alt={user.username}
                             className="user-avatar"
-                            onError={(e) => e.target.src = `https://minotar.net/helm/Steve/32.png`}
+                            onError={(e) => e.target.src = `https://minotar.net/helm/Steve/48.png`}
                           />
                         </div>
                         <div className="user-info">
-                          <div className="user-name-container">
-                            <span className="user-name">{user.username}</span>
-                          </div>
-                          <div className="small text-muted" style={{ fontSize: '0.7rem' }}>Nạp tích lũy</div>
+                          <span className="user-name">{user.username}</span>
+                          <span className="user-amount">
+                            {user.total.toLocaleString('vi-VN')} VNĐ
+                          </span>
                         </div>
-                        <div className="user-amount">
-                          {user.total.toLocaleString('vi-VN')}
-                          <span style={{ fontSize: '0.65rem', marginLeft: '2px', color: '#64748b' }}>đ</span>
+                        <div className="medal-icon d-flex align-items-center justify-content-center">
+                          {index === 0 ? '🥇' : 
+                           index === 1 ? '🥈' :
+                           index === 2 ? '🥉' : ''}
                         </div>
                       </div>
                     ))

@@ -25,7 +25,8 @@ import {
   BiImage,
   BiShoppingBag,
   BiCalendar,
-  BiTrophy
+  BiTrophy,
+  BiStar
 } from 'react-icons/bi';
 
 const Admin = () => {
@@ -87,16 +88,31 @@ const Admin = () => {
     yearlyRevenue: 0,
     totalRevenue: 0,
     revenueByDay: [],
-    topProducts: []
+    topProducts: [],
+    recentOrders: [],
+    categoriesCount: 0,
+    productsCount: 0
   });
 
   const loadDashboardStats = async () => {
     try {
-      const { data: allOrders, error } = await supabase
-        .from('orders')
-        .select('created_at, price, status, delivered, product, mc_username');
+      // Parallel fetch for counts
+      const [
+        { count: catCount },
+        { count: prodCount },
+        { data: allOrders, error: ordersError }
+      ] = await Promise.all([
+        supabase.from('categories').select('*', { count: 'exact', head: true }),
+        supabase.from('products').select('*', { count: 'exact', head: true }),
+        supabase.from('orders')
+          .select('id, created_at, price, status, delivered, product, mc_username, payment_method')
+          .order('created_at', { ascending: false })
+      ]);
       
-      if (error) throw error;
+      if (ordersError) throw ordersError;
+
+      // Get 5 most recent orders
+      const recentOrders = allOrders.slice(0, 5);
 
       const now = new Date();
       const currentMonth = now.getMonth();
@@ -194,7 +210,10 @@ const Admin = () => {
         totalRevenue: tRevenue,
         revenueByDay: last7Days,
         topProducts,
-        topUsers: formatTopUsers(userTopUps)
+        topUsers: formatTopUsers(userTopUps),
+        recentOrders,
+        categoriesCount: catCount || 0,
+        productsCount: prodCount || 0
       });
     } catch (error) {
       console.error('Error loading dashboard stats:', error);
@@ -591,7 +610,7 @@ const Admin = () => {
               {/* Revenue Chart Section */}
               <div className="row g-4">
                 <div className="col-12 col-lg-8">
-                  <div className="admin-card glass p-4 h-100">
+                  <div className="admin-card glass p-4">
                     <h5 className="mb-4" style={{ color: 'var(--winter-blue-dark)', fontWeight: 700 }}>Doanh Thu 7 Ngày Gần Nhất</h5>
                     <div style={{ height: '300px', display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', padding: '0 20px 40px 20px', position: 'relative', borderBottom: '1px solid rgba(0,0,0,0.1)' }}>
                       {stats.revenueByDay.map((day, index) => {
@@ -624,6 +643,67 @@ const Admin = () => {
                       })}
                     </div>
                   </div>
+
+                  <div className="admin-card glass p-4 mt-4">
+                    <div className="d-flex justify-content-between align-items-center mb-4">
+                      <h5 style={{ color: 'var(--winter-blue-dark)', fontWeight: 700, margin: 0 }}>Đơn Hàng Mới Nhất</h5>
+                      <motion.button 
+                        className="btn btn-link p-0 text-decoration-none"
+                        onClick={() => setActiveTab('orders')}
+                        style={{ color: 'var(--winter-blue)', fontWeight: 600, fontSize: '0.9rem' }}
+                      >
+                        Xem tất cả
+                      </motion.button>
+                    </div>
+                    <div className="table-responsive">
+                      <table className="table table-hover align-middle mb-0">
+                        <thead>
+                          <tr>
+                            <th className="border-0 bg-transparent text-muted small fw-bold text-uppercase">Người chơi</th>
+                            <th className="border-0 bg-transparent text-muted small fw-bold text-uppercase">Sản phẩm</th>
+                            <th className="border-0 bg-transparent text-muted small fw-bold text-uppercase">Giá</th>
+                            <th className="border-0 bg-transparent text-muted small fw-bold text-uppercase">Trạng thái</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {stats.recentOrders.length === 0 ? (
+                            <tr>
+                              <td colSpan="4" className="text-center py-4 text-muted">Chưa có đơn hàng nào</td>
+                            </tr>
+                          ) : (
+                            stats.recentOrders.map((order) => (
+                              <tr key={order.id} style={{ cursor: 'pointer' }} onClick={() => setActiveTab('orders')}>
+                                <td className="border-0 py-3">
+                                  <div className="d-flex align-items-center gap-2">
+                                    <img 
+                                      src={`https://minotar.net/helm/${order.mc_username}/24.png`} 
+                                      alt={order.mc_username}
+                                      style={{ width: '24px', height: '24px', borderRadius: '4px' }}
+                                      onError={(e) => e.target.src = `https://minotar.net/helm/Steve/24.png`}
+                                    />
+                                    <span className="fw-bold" style={{ fontSize: '0.9rem' }}>{order.mc_username}</span>
+                                  </div>
+                                </td>
+                                <td className="border-0 py-3 text-muted" style={{ fontSize: '0.9rem' }}>{order.product}</td>
+                                <td className="border-0 py-3 fw-bold text-primary" style={{ fontSize: '0.9rem' }}>
+                                  {Number(order.price)?.toLocaleString('vi-VN')}đ
+                                </td>
+                                <td className="border-0 py-3">
+                                  <span className={`badge rounded-pill px-2 py-1`} style={{ 
+                                    fontSize: '0.7rem',
+                                    backgroundColor: order.status === 'paid' ? 'var(--winter-blue)' : (order.status === 'delivered' ? '#10b981' : '#94a3b8'),
+                                    color: '#fff'
+                                  }}>
+                                    {order.status === 'paid' ? 'Đã Thanh Toán' : (order.status === 'delivered' ? 'Đã Giao' : 'Chờ')}
+                                  </span>
+                                </td>
+                              </tr>
+                            ))
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
                 </div>
                 <div className="col-12 col-lg-4">
                   <div className="admin-card glass p-4 h-100">
@@ -643,69 +723,69 @@ const Admin = () => {
                       )}
                     </ul>
 
-                    <div className="admin-card glass p-4 mb-4">
-                      <div className="d-flex align-items-center justify-content-between mb-4">
-                        <h5 className="m-0 fw-bold d-flex align-items-center gap-2" style={{ color: 'var(--winter-blue-dark)' }}>
-                          <BiTrophy className="text-warning" /> Thống Kê Đua Top
-                        </h5>
+                    <div className="top-nạp-card mb-4">
+                      <div className="top-nap-header">
+                        <span className="top-nap-star"><BiStar /></span>
+                        <h2 className="top-nap-title">Top Nạp</h2>
                       </div>
                       
                       <div className="row g-3 mb-4">
                         <div className="col-md-6">
-                          <label className="small fw-bold text-muted mb-1 text-uppercase">Bắt đầu</label>
-                          <input 
-                            type="date" 
-                            className="form-control form-control-sm border shadow-none"
-                            value={adminDateRange.start}
-                            onChange={(e) => setAdminDateRange({ ...adminDateRange, start: e.target.value })}
-                          />
+                          <div className="date-field">
+                            <label className="mb-1">TỪ NGÀY</label>
+                            <input 
+                              type="date" 
+                              className="date-input-clean"
+                              value={adminDateRange.start}
+                              onChange={(e) => setAdminDateRange({ ...adminDateRange, start: e.target.value })}
+                            />
+                          </div>
                         </div>
                         <div className="col-md-6">
-                          <label className="small fw-bold text-muted mb-1 text-uppercase">Kết thúc</label>
-                          <input 
-                            type="date" 
-                            className="form-control form-control-sm border shadow-none"
-                            value={adminDateRange.end}
-                            onChange={(e) => setAdminDateRange({ ...adminDateRange, end: e.target.value })}
-                          />
+                          <div className="date-field">
+                            <label className="mb-1">ĐẾN NGÀY</label>
+                            <input 
+                              type="date" 
+                              className="date-input-clean"
+                              value={adminDateRange.end}
+                              onChange={(e) => setAdminDateRange({ ...adminDateRange, end: e.target.value })}
+                            />
+                          </div>
                         </div>
                       </div>
 
-                      <div className="leaderboard-admin-list">
+                      <div className="leaderboard-list">
                         {(!stats.topUsers || stats.topUsers.length === 0) ? (
-                          <div className="text-center py-4 border rounded bg-light bg-opacity-50">
+                          <div className="text-center py-4">
                             <span className="text-muted small">Chưa có dữ liệu trong khoảng này</span>
                           </div>
                         ) : (
                           stats.topUsers.map((u, i) => (
                             <div 
                               key={i} 
-                              className="d-flex justify-content-between align-items-center p-3 mb-2 border-bottom"
+                              className={`leaderboard-item rank-${i + 1}`}
                             >
-                              <div className="d-flex align-items-center gap-3">
-                                <span className="rank-number">
-                                  {i === 0 ? <BiTrophy className="rank-icon gold" /> : 
-                                   i === 1 ? <BiTrophy className="rank-icon silver" /> :
-                                   i === 2 ? <BiTrophy className="rank-icon bronze" /> : 
-                                   i + 1}
-                                </span>
-                                <div className="user-avatar-wrapper admin-avatar">
-                                  <img 
-                                    src={`https://minotar.net/helm/${u.username}/24.png`} 
-                                    alt={u.username}
-                                    className="user-avatar"
-                                    onError={(e) => e.target.src = `https://minotar.net/helm/Steve/24.png`}
-                                  />
-                                </div>
-                                <div>
-                                  <span className="fw-bold d-block">{u.username}</span>
-                                </div>
+                              <div className="rank-number">
+                                {i + 1}
                               </div>
-                              <div className="text-end">
-                                <span className="fw-bold text-primary">
-                                  {u.total?.toLocaleString('vi-VN')}
-                                  <span className="ms-1 small text-muted">đ</span>
+                              <div className="user-avatar-wrapper">
+                                <img 
+                                  src={`https://minotar.net/helm/${u.username}/48.png`} 
+                                  alt={u.username}
+                                  className="user-avatar"
+                                  onError={(e) => e.target.src = `https://minotar.net/helm/Steve/48.png`}
+                                />
+                              </div>
+                              <div className="user-info">
+                                <span className="user-name">{u.username}</span>
+                                <span className="user-amount">
+                                  {u.total?.toLocaleString('vi-VN')} VNĐ
                                 </span>
+                              </div>
+                              <div className="medal-icon d-flex align-items-center justify-content-center">
+                                {i === 0 ? '🥇' : 
+                                 i === 1 ? '🥈' :
+                                 i === 2 ? '🥉' : ''}
                               </div>
                             </div>
                           ))
@@ -714,24 +794,27 @@ const Admin = () => {
                     </div>
 
                     <h5 className="mb-4" style={{ color: 'var(--winter-blue-dark)', fontWeight: 700 }}>Tổng Quan Khác</h5>
-                    <ul className="list-unstyled">
-                      <li className="mb-3 d-flex justify-content-between align-items-center p-2 rounded" style={{ background: 'rgba(255,255,255,0.5)' }}>
-                        <span style={{ fontWeight: 500 }}>Bài viết tin tức</span>
-                        <span className="badge bg-primary rounded-pill">{news.length}</span>
-                      </li>
-                      <li className="mb-3 d-flex justify-content-between align-items-center p-2 rounded" style={{ background: 'rgba(255,255,255,0.5)' }}>
-                        <span style={{ fontWeight: 500 }}>Liên hệ chưa đọc</span>
+                    <div className="d-flex flex-column gap-3">
+                      <div className="p-3 rounded d-flex justify-content-between align-items-center" style={{ background: 'rgba(14, 165, 233, 0.05)', borderLeft: '4px solid var(--winter-blue)' }}>
+                        <span style={{ fontWeight: 600, color: '#1a1a1a' }}>Danh mục sản phẩm</span>
+                        <span className="badge bg-primary rounded-pill">{stats.categoriesCount}</span>
+                      </div>
+                      <div className="p-3 rounded d-flex justify-content-between align-items-center" style={{ background: 'rgba(16, 185, 129, 0.05)', borderLeft: '4px solid #10b981' }}>
+                        <span style={{ fontWeight: 600, color: '#1a1a1a' }}>Sản phẩm hiện có</span>
+                        <span className="badge bg-success rounded-pill">{stats.productsCount}</span>
+                      </div>
+                      <div className="p-3 rounded d-flex justify-content-between align-items-center" style={{ background: 'rgba(139, 92, 246, 0.05)', borderLeft: '4px solid #8b5cf6' }}>
+                        <span style={{ fontWeight: 600, color: '#1a1a1a' }}>Bài viết tin tức</span>
+                        <span className="badge bg-info rounded-pill" style={{ backgroundColor: '#8b5cf6 !important' }}>{news.length}</span>
+                      </div>
+                      <div className="p-3 rounded d-flex justify-content-between align-items-center" style={{ background: 'rgba(239, 68, 68, 0.05)', borderLeft: '4px solid #ef4444' }}>
+                        <div className="d-flex flex-column">
+                          <span style={{ fontWeight: 600, color: '#1a1a1a' }}>Yêu cầu liên hệ mới</span>
+                          <small className="text-muted" style={{ fontSize: '0.75rem' }}>Chưa đọc: {unreadCount}</small>
+                        </div>
                         <span className="badge bg-danger rounded-pill">{unreadCount}</span>
-                      </li>
-                      <li className="mb-3 d-flex justify-content-between align-items-center p-2 rounded" style={{ background: 'rgba(255,255,255,0.5)' }}>
-                        <span style={{ fontWeight: 500 }}>Liên hệ chờ xử lý</span>
-                        <span className="badge bg-warning rounded-pill">{pendingCount}</span>
-                      </li>
-                      <li className="mb-3 d-flex justify-content-between align-items-center p-2 rounded" style={{ background: 'rgba(255,255,255,0.5)' }}>
-                        <span style={{ fontWeight: 500 }}>Liên hệ đang kiểm tra</span>
-                        <span className="badge bg-info rounded-pill">{processingCount}</span>
-                      </li>
-                    </ul>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
