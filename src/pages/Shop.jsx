@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { BiShoppingBag, BiUser, BiCheckCircle, BiXCircle, BiGift, BiCreditCard, BiStar } from 'react-icons/bi';
+import { BiShoppingBag, BiUser, BiCheckCircle, BiXCircle, BiGift, BiCreditCard, BiStar, BiCalendar, BiTrophy } from 'react-icons/bi';
 import { supabase } from '../supabaseClient';
 import SnowEffect from '../components/SnowEffect';
 import '../styles/shop-winter.css';
@@ -9,6 +9,11 @@ import '../styles/shop-winter.css';
 const Shop = () => {
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
+  const [topUsers, setTopUsers] = useState([]);
+  const [dateRange, setDateRange] = useState({
+    start: new Date(new Date().setDate(new Date().getDate() - 30)).toISOString().split('T')[0], // Mặc định 30 ngày gần nhất
+    end: new Date().toISOString().split('T')[0]
+  });
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const formRef = useRef(null);
@@ -81,6 +86,47 @@ const Shop = () => {
     loadProducts();
     loadPaymentInfo();
   }, []);
+
+  useEffect(() => {
+    loadTopUsers();
+  }, [dateRange]);
+
+  const loadTopUsers = async () => {
+    try {
+      let query = supabase
+        .from('orders')
+        .select('mc_username, price, status, delivered, created_at')
+        .or('status.eq.paid,status.eq.delivered');
+      
+      if (dateRange.start) {
+        query = query.gte('created_at', new Date(dateRange.start).toISOString());
+      }
+      if (dateRange.end) {
+        const endDate = new Date(dateRange.end);
+        endDate.setHours(23, 59, 59, 999);
+        query = query.lte('created_at', endDate.toISOString());
+      }
+
+      const { data, error } = await query;
+      
+      if (error) throw error;
+
+      const userTopUps = {};
+      data.forEach(order => {
+        const username = order.mc_username || 'Ẩn danh';
+        userTopUps[username] = (userTopUps[username] || 0) + (Number(order.price) || 0);
+      });
+
+      const sortedUsers = Object.entries(userTopUps)
+        .map(([username, total]) => ({ username, total }))
+        .sort((a, b) => b.total - a.total)
+        .slice(0, 5);
+
+      setTopUsers(sortedUsers);
+    } catch (error) {
+      console.error('Error loading top users:', error);
+    }
+  };
 
   const loadCategories = async () => {
     try {
@@ -468,6 +514,65 @@ const Shop = () => {
                   ))}
                 </div>
               </div>
+
+              <div className="top-nạp-card">
+                <div className="mb-4">
+                  <h5 className="fw-bold mb-3 d-flex align-items-center gap-2" style={{ color: 'var(--winter-blue-dark)' }}>
+                    <BiTrophy className="text-warning" /> Bảng Xếp Hạng
+                  </h5>
+                  
+                  <div className="filter-group">
+                    <div className="date-field">
+                      <label>Từ ngày</label>
+                      <input 
+                        type="date" 
+                        className="date-input-clean"
+                        value={dateRange.start}
+                        onChange={(e) => setDateRange({ ...dateRange, start: e.target.value })}
+                      />
+                    </div>
+                    <div className="date-field">
+                      <label>Đến ngày</label>
+                      <input 
+                        type="date" 
+                        className="date-input-clean"
+                        value={dateRange.end}
+                        onChange={(e) => setDateRange({ ...dateRange, end: e.target.value })}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="leaderboard-list">
+                  {topUsers.length === 0 ? (
+                    <div className="text-center py-4">
+                      <p className="text-muted small m-0">Chưa có dữ liệu nạp</p>
+                    </div>
+                  ) : (
+                    topUsers.map((user, index) => (
+                      <div 
+                        key={index} 
+                        className={`leaderboard-item rank-${index + 1}`}
+                      >
+                        <div className="rank-number">
+                          {index === 0 ? <BiTrophy className="rank-icon gold" /> : 
+                           index === 1 ? <BiTrophy className="rank-icon silver" /> :
+                           index === 2 ? <BiTrophy className="rank-icon bronze" /> : 
+                           index + 1}
+                        </div>
+                        <div className="user-info">
+                          <div className="user-name">{user.username}</div>
+                          <div className="small text-muted" style={{ fontSize: '0.7rem' }}>Nạp tích lũy</div>
+                        </div>
+                        <div className="user-amount">
+                          {user.total.toLocaleString('vi-VN')}
+                          <span style={{ fontSize: '0.65rem', marginLeft: '2px', color: '#64748b' }}>đ</span>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
             </motion.div>
 
             <motion.div 
@@ -510,7 +615,7 @@ const Shop = () => {
                           </h5>
                         </div>
                       </div>
-                      <p style={{ color: 'var(--winter-text)', marginBottom: '1rem', minHeight: '40px' }}>
+                      <p className="product-description-truncate" style={{ color: 'var(--winter-text)', marginBottom: '1rem' }}>
                         {product.description}
                       </p>
                       <div className="d-flex justify-content-between align-items-center">
@@ -593,7 +698,7 @@ const Shop = () => {
                       <p className="mb-1" style={{ color: 'var(--winter-text)', fontWeight: 600, fontSize: '1.1rem' }}>
                         {selectedProduct.name}
                       </p>
-                      <p className="mb-0" style={{ color: 'var(--winter-text)' }}>
+                      <p className="mb-0 product-description-full" style={{ color: 'var(--winter-text)' }}>
                         {selectedProduct.description}
                       </p>
                       <p className="mt-2 mb-0" style={{ color: 'var(--winter-blue-dark)', fontWeight: 700, fontSize: '1.2rem' }}>

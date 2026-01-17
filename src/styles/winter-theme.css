@@ -354,3 +354,22 @@ body {
   }
 }
 
+/* Rank Styling */
+.rank-number {
+  font-size: 0.875rem;
+  font-weight: 800;
+  width: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+}
+
+.rank-icon {
+  font-size: 1.25rem;
+}
+
+.rank-icon.gold { color: #fbbf24; filter: drop-shadow(0 0 5px rgba(251, 191, 36, 0.5)); }
+.rank-icon.silver { color: #94a3b8; filter: drop-shadow(0 0 5px rgba(148, 163, 184, 0.5)); }
+.rank-icon.bronze { color: #d97706; filter: drop-shadow(0 0 5px rgba(217, 119, 6, 0.5)); }
+

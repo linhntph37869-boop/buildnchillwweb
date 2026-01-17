@@ -23,7 +23,9 @@ import {
   BiEnvelope,
   BiCheck,
   BiImage,
-  BiShoppingBag
+  BiShoppingBag,
+  BiCalendar,
+  BiTrophy
 } from 'react-icons/bi';
 
 const Admin = () => {
@@ -47,6 +49,10 @@ const Admin = () => {
   } = useData();
   
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [adminDateRange, setAdminDateRange] = useState({
+    start: new Date(new Date().setDate(new Date().getDate() - 30)).toISOString().split('T')[0],
+    end: new Date().toISOString().split('T')[0]
+  });
   const [showModal, setShowModal] = useState(false);
   const [editingPost, setEditingPost] = useState(null);
   const [formData, setFormData] = useState({
@@ -88,7 +94,7 @@ const Admin = () => {
     try {
       const { data: allOrders, error } = await supabase
         .from('orders')
-        .select('created_at, price, status, delivered, product');
+        .select('created_at, price, status, delivered, product, mc_username');
       
       if (error) throw error;
 
@@ -106,8 +112,13 @@ const Admin = () => {
       let tRevenue = 0;
       
       const productCounts = {};
+      const userTopUps = {};
       
-      // For chart: Last 7 days
+      const now_date = new Date();
+      const customStartDate = adminDateRange.start ? new Date(adminDateRange.start) : null;
+      const customEndDate = adminDateRange.end ? new Date(adminDateRange.end) : null;
+      if (customEndDate) customEndDate.setHours(23, 59, 59, 999);
+
       const last7Days = [...Array(7)].map((_, i) => {
         const d = new Date();
         d.setDate(d.getDate() - i);
@@ -120,14 +131,27 @@ const Admin = () => {
 
       allOrders.forEach(order => {
         const orderDate = new Date(order.created_at);
+        const orderDateStr = orderDate.toISOString().split('T')[0];
+        const orderMonthStr = orderDate.toISOString().slice(0, 7);
         const isPaid = order.status === 'paid' || order.status === 'delivered' || order.delivered;
-        const price = order.price || 0;
+        const price = Number(order.price) || 0;
+        const username = order.mc_username || 'Ẩn danh';
 
         if (isPaid) {
           tRevenue += price;
           // Count top products
           const pName = order.product || 'Ẩn danh';
           productCounts[pName] = (productCounts[pName] || 0) + 1;
+
+          // Count user top ups based on range
+          if (customStartDate && customEndDate) {
+            if (orderDate >= customStartDate && orderDate <= customEndDate) {
+              userTopUps[username] = (userTopUps[username] || 0) + price;
+            }
+          } else {
+            // Default to all if no range (should not happen with defaults)
+            userTopUps[username] = (userTopUps[username] || 0) + price;
+          }
         }
         
         if (orderDate.getFullYear() === currentYear) {
@@ -154,6 +178,12 @@ const Admin = () => {
         .sort((a, b) => b.count - a.count)
         .slice(0, 5);
 
+      // Format top users function
+      const formatTopUsers = (obj) => Object.entries(obj)
+        .map(([username, total]) => ({ username, total }))
+        .sort((a, b) => b.total - a.total)
+        .slice(0, 5);
+
       setStats({
         pendingOrders: pending,
         monthlyOrders: mOrders,
@@ -163,7 +193,8 @@ const Admin = () => {
         yearlyRevenue: yRevenue,
         totalRevenue: tRevenue,
         revenueByDay: last7Days,
-        topProducts
+        topProducts,
+        topUsers: formatTopUsers(userTopUps)
       });
     } catch (error) {
       console.error('Error loading dashboard stats:', error);
@@ -175,7 +206,7 @@ const Admin = () => {
     if (isAuthenticated) {
       loadDashboardStats();
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, adminDateRange]);
 
   const statusOptions = [
     { value: 'pending', label: '🔴 Đã Nhận', color: '#ef4444' },
@@ -611,6 +642,68 @@ const Admin = () => {
                         ))
                       )}
                     </ul>
+
+                    <div className="admin-card glass p-4 mb-4">
+                      <div className="d-flex align-items-center justify-content-between mb-4">
+                        <h5 className="m-0 fw-bold d-flex align-items-center gap-2" style={{ color: 'var(--winter-blue-dark)' }}>
+                          <BiTrophy className="text-warning" /> Thống Kê Đua Top
+                        </h5>
+                      </div>
+                      
+                      <div className="row g-3 mb-4">
+                        <div className="col-md-6">
+                          <label className="small fw-bold text-muted mb-1 text-uppercase">Bắt đầu</label>
+                          <input 
+                            type="date" 
+                            className="form-control form-control-sm border shadow-none"
+                            value={adminDateRange.start}
+                            onChange={(e) => setAdminDateRange({ ...adminDateRange, start: e.target.value })}
+                          />
+                        </div>
+                        <div className="col-md-6">
+                          <label className="small fw-bold text-muted mb-1 text-uppercase">Kết thúc</label>
+                          <input 
+                            type="date" 
+                            className="form-control form-control-sm border shadow-none"
+                            value={adminDateRange.end}
+                            onChange={(e) => setAdminDateRange({ ...adminDateRange, end: e.target.value })}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="leaderboard-admin-list">
+                        {(!stats.topUsers || stats.topUsers.length === 0) ? (
+                          <div className="text-center py-4 border rounded bg-light bg-opacity-50">
+                            <span className="text-muted small">Chưa có dữ liệu trong khoảng này</span>
+                          </div>
+                        ) : (
+                          stats.topUsers.map((u, i) => (
+                            <div 
+                              key={i} 
+                              className="d-flex justify-content-between align-items-center p-3 mb-2 border-bottom"
+                            >
+                              <div className="d-flex align-items-center gap-3">
+                                <span className="rank-number">
+                                  {i === 0 ? <BiTrophy className="rank-icon gold" /> : 
+                                   i === 1 ? <BiTrophy className="rank-icon silver" /> :
+                                   i === 2 ? <BiTrophy className="rank-icon bronze" /> : 
+                                   i + 1}
+                                </span>
+                                <div>
+                                  <span className="fw-bold d-block">{u.username}</span>
+                                </div>
+                              </div>
+                              <div className="text-end">
+                                <span className="fw-bold text-primary">
+                                  {u.total?.toLocaleString('vi-VN')}
+                                  <span className="ms-1 small text-muted">đ</span>
+                                </span>
+                              </div>
+                            </div>
+                          ))
+                        )}
+                      </div>
+                    </div>
 
                     <h5 className="mb-4" style={{ color: 'var(--winter-blue-dark)', fontWeight: 700 }}>Tổng Quan Khác</h5>
                     <ul className="list-unstyled">
