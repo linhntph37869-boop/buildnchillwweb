@@ -29,12 +29,14 @@
   --winter-glow: 0 0 20px rgba(14, 165, 233, 0.5);
   
   /* Top Nap Specific Colors */
-  --top-rank-1-border: #facc15;
-  --top-rank-1-bg: #fffdf2;
-  --top-rank-2-border: #94a3b8;
-  --top-rank-2-bg: #f8fafc;
-  --top-rank-3-border: #fca5a5;
-  --top-rank-3-bg: #fffafb;
+  --top-rank-1-border: #FCD34D;
+  --top-rank-1-bg: #FFFBEB;
+  --top-rank-2-border: #CBD5E1;
+  --top-rank-2-bg: #F1F5F9;
+  --top-rank-3-border: #FECACA;
+  --top-rank-3-bg: #FEF2F2;
+  --top-rank-4-border: #BBF7D0;
+  --top-rank-4-bg: #F0FDF4;
   --top-nap-title: #e11d48;
   --top-nap-label: #1e293b;
   --top-nap-amount: #ef4444;
@@ -553,19 +555,25 @@ body {
 }
 
 .leaderboard-item.rank-1 {
-  background: linear-gradient(90deg, #f0f9ff 0%, #ffffff 100%);
-  border: 2px solid var(--winter-blue);
-  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.15);
+  background: var(--top-rank-1-bg);
+  border: 2px solid var(--top-rank-1-border);
+  box-shadow: 0 4px 12px rgba(252, 211, 77, 0.2);
 }
 
 .leaderboard-item.rank-2 {
-  background: #f8fafc;
-  border: 2px solid var(--winter-silver);
+  background: var(--top-rank-2-bg);
+  border: 2px solid var(--top-rank-2-border);
 }
 
 .leaderboard-item.rank-3 {
-  background: #fff;
-  border: 2px solid #e2e8f0;
+  background: var(--top-rank-3-bg);
+  border: 2px solid var(--top-rank-3-border);
+}
+
+.leaderboard-item.rank-4,
+.leaderboard-item.rank-5 {
+  background: var(--top-rank-4-bg);
+  border: 2px solid var(--top-rank-4-border);
 }
 
 /* Snow decoration for Rank 1 */
@@ -593,6 +601,8 @@ body {
 .leaderboard-item.rank-1 .rank-number { color: var(--top-rank-1-border); }
 .leaderboard-item.rank-2 .rank-number { color: var(--top-rank-2-border); }
 .leaderboard-item.rank-3 .rank-number { color: var(--top-rank-3-border); }
+.leaderboard-item.rank-4 .rank-number,
+.leaderboard-item.rank-5 .rank-number { color: var(--top-rank-4-border); }
 
 .leaderboard-item .user-avatar-wrapper {
   width: 48px;
@@ -605,6 +615,10 @@ body {
 }
 
 .leaderboard-item.rank-1 .user-avatar-wrapper { border-color: var(--top-rank-1-border); }
+.leaderboard-item.rank-2 .user-avatar-wrapper { border-color: var(--top-rank-2-border); }
+.leaderboard-item.rank-3 .user-avatar-wrapper { border-color: var(--top-rank-3-border); }
+.leaderboard-item.rank-4 .user-avatar-wrapper,
+.leaderboard-item.rank-5 .user-avatar-wrapper { border-color: var(--top-rank-4-border); }
 
 .leaderboard-item .user-avatar {
   width: 100%;

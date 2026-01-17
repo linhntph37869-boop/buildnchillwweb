@@ -760,35 +760,47 @@ const Admin = () => {
                             <span className="text-muted small">Chưa có dữ liệu trong khoảng này</span>
                           </div>
                         ) : (
-                          stats.topUsers.map((u, i) => (
-                            <div 
-                              key={i} 
-                              className={`leaderboard-item rank-${i + 1}`}
-                            >
-                              <div className="rank-number">
-                                {i + 1}
-                              </div>
-                              <div className="user-avatar-wrapper">
-                                <img 
-                                  src={`https://minotar.net/helm/${u.username}/48.png`} 
-                                  alt={u.username}
-                                  className="user-avatar"
-                                  onError={(e) => e.target.src = `https://minotar.net/helm/Steve/48.png`}
-                                />
-                              </div>
-                              <div className="user-info">
-                                <span className="user-name">{u.username}</span>
-                                <span className="user-amount">
-                                  {u.total?.toLocaleString('vi-VN')} VNĐ
-                                </span>
-                              </div>
-                              <div className="medal-icon d-flex align-items-center justify-content-center">
-                                {i === 0 ? '🥇' : 
-                                 i === 1 ? '🥈' :
-                                 i === 2 ? '🥉' : ''}
-                              </div>
-                            </div>
-                          ))
+                          (() => {
+                            let currentRank = 0;
+                            let lastTotal = -1;
+                            
+                            return stats.topUsers.map((u, i) => {
+                              if (u.total !== lastTotal) {
+                                currentRank = i + 1;
+                              }
+                              lastTotal = u.total;
+                              
+                              return (
+                                <div 
+                                  key={i} 
+                                  className={`leaderboard-item rank-${currentRank}`}
+                                >
+                                  <div className="rank-number">
+                                    {currentRank}
+                                  </div>
+                                  <div className="user-avatar-wrapper">
+                                    <img 
+                                      src={`https://minotar.net/helm/${u.username}/48.png`} 
+                                      alt={u.username}
+                                      className="user-avatar"
+                                      onError={(e) => e.target.src = `https://minotar.net/helm/Steve/48.png`}
+                                    />
+                                  </div>
+                                  <div className="user-info">
+                                    <span className="user-name">{u.username}</span>
+                                    <span className="user-amount">
+                                      {u.total?.toLocaleString('vi-VN')} VNĐ
+                                    </span>
+                                  </div>
+                                  <div className="medal-icon d-flex align-items-center justify-content-center">
+                                    {currentRank === 1 ? '🥇' : 
+                                     currentRank === 2 ? '🥈' :
+                                     currentRank === 3 ? '🥉' : ''}
+                                  </div>
+                                </div>
+                              );
+                            });
+                          })()
                         )}
                       </div>
                     </div>

@@ -617,35 +617,47 @@ const Shop = () => {
                       <p className="text-muted small m-0">Chưa có dữ liệu nạp</p>
                     </div>
                   ) : (
-                    topUsers.map((user, index) => (
-                      <div 
-                        key={index} 
-                        className={`leaderboard-item rank-${index + 1}`}
-                      >
-                        <div className="rank-number">
-                          {index + 1}
-                        </div>
-                        <div className="user-avatar-wrapper">
-                          <img 
-                            src={`https://minotar.net/helm/${user.username}/48.png`} 
-                            alt={user.username}
-                            className="user-avatar"
-                            onError={(e) => e.target.src = `https://minotar.net/helm/Steve/48.png`}
-                          />
-                        </div>
-                        <div className="user-info">
-                          <span className="user-name">{user.username}</span>
-                          <span className="user-amount">
-                            {user.total.toLocaleString('vi-VN')} VNĐ
-                          </span>
-                        </div>
-                        <div className="medal-icon d-flex align-items-center justify-content-center">
-                          {index === 0 ? '🥇' : 
-                           index === 1 ? '🥈' :
-                           index === 2 ? '🥉' : ''}
-                        </div>
-                      </div>
-                    ))
+                    (() => {
+                      let currentRank = 0;
+                      let lastTotal = -1;
+                      
+                      return topUsers.map((user, index) => {
+                        if (user.total !== lastTotal) {
+                          currentRank = index + 1;
+                        }
+                        lastTotal = user.total;
+                        
+                        return (
+                          <div 
+                            key={index} 
+                            className={`leaderboard-item rank-${currentRank}`}
+                          >
+                            <div className="rank-number">
+                              {currentRank}
+                            </div>
+                            <div className="user-avatar-wrapper">
+                              <img 
+                                src={`https://minotar.net/helm/${user.username}/48.png`} 
+                                alt={user.username}
+                                className="user-avatar"
+                                onError={(e) => e.target.src = `https://minotar.net/helm/Steve/48.png`}
+                              />
+                            </div>
+                            <div className="user-info">
+                              <span className="user-name">{user.username}</span>
+                              <span className="user-amount">
+                                {user.total.toLocaleString('vi-VN')} VNĐ
+                              </span>
+                            </div>
+                            <div className="medal-icon d-flex align-items-center justify-content-center">
+                              {currentRank === 1 ? '🥇' : 
+                               currentRank === 2 ? '🥈' :
+                               currentRank === 3 ? '🥉' : ''}
+                            </div>
+                          </div>
+                        );
+                      });
+                    })()
                   )}
                 </div>
               </div>
